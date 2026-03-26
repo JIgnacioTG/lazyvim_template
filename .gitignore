@@ -6,3 +6,5 @@ debug
 foo.*
 *.log
 data
+.ruby-tools/*/vendor/
+.ruby-tools/*/.bundle/
