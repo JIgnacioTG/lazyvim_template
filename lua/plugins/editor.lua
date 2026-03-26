@@ -1,6 +1,4 @@
 return {
-  { import = "lazyvim.plugins.extras.editor.neo-tree" },
-  { import = "lazyvim.plugins.extras.ui.indent-blankline" },
   {
     "lewis6991/gitsigns.nvim",
     opts = {
