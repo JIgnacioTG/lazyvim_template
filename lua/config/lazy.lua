@@ -17,8 +17,6 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   spec = {
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
-    { import = "lazyvim.plugins.extras.editor.neo-tree" },
-    { import = "lazyvim.plugins.extras.ui.indent-blankline" },
     { import = "plugins" },
   },
   defaults = {
