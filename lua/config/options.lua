@@ -31,8 +31,32 @@ local function has_clipboard_tool()
   return false
 end
 
+local function local_register_paste()
+  return function()
+    return vim.fn.getreg('"', 1, true), vim.fn.getregtype('"')
+  end
+end
+
+local function osc52_clipboard()
+  local osc52 = require("vim.ui.clipboard.osc52")
+  local paste = local_register_paste()
+
+  return {
+    name = "OSC 52",
+    copy = {
+      ["+"] = osc52.copy("+"),
+      ["*"] = osc52.copy("*"),
+    },
+    paste = {
+      ["+"] = paste,
+      ["*"] = paste,
+    },
+  }
+end
+
 if not has_clipboard_tool() then
-  vim.g.clipboard = "osc52"
+  vim.g.clipboard = osc52_clipboard()
+  vim.opt.clipboard = "unnamedplus"
 end
 
 vim.opt.number = true
