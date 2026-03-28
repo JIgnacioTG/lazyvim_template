@@ -1,7 +1,6 @@
 local function build_copy_targets(path)
   local targets = {}
   local seen = {}
-  local home = vim.uv.os_homedir()
 
   local function add_target(label, value)
     if value == nil or value == "" or seen[value] then
@@ -16,16 +15,8 @@ local function build_copy_targets(path)
   end
 
   add_target("Absolute path", path)
-  add_target("Path relative to cwd", vim.fn.fnamemodify(path, ":."))
-
-  if home and path:find(home, 1, true) == 1 then
-    add_target("Path relative to home", "~" .. path:sub(#home + 1))
-  end
-
-  add_target("Filename", vim.fn.fnamemodify(path, ":t"))
+  add_target("Relative path", vim.fn.fnamemodify(path, ":."))
   add_target("Basename", vim.fn.fnamemodify(path, ":t:r"))
-  add_target("Extension", vim.fn.fnamemodify(path, ":e"))
-  add_target("URI", vim.uri_from_fname(path))
 
   return targets
 end
