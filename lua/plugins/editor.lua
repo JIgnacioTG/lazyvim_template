@@ -1,9 +1,23 @@
-local function build_copy_targets(path)
+local function basename_target(path, is_dir)
+  local normalized_path = path:gsub("[/\\]+$", "")
+  if normalized_path == "" then
+    normalized_path = path
+  end
+
+  if is_dir then
+    return vim.fn.fnamemodify(normalized_path, ":t")
+  end
+
+  return vim.fn.fnamemodify(normalized_path, ":t:r")
+end
+
+local function build_copy_targets(item)
+  local path = item.file
   local targets = {}
   local seen = {}
 
-  local function add_target(label, value)
-    if value == nil or value == "" or seen[value] then
+  local function add_target(label, value, allow_duplicate_value)
+    if value == nil or value == "" or (not allow_duplicate_value and seen[value]) then
       return
     end
 
@@ -16,7 +30,7 @@ local function build_copy_targets(path)
 
   add_target("Absolute path", path)
   add_target("Relative path", vim.fn.fnamemodify(path, ":."))
-  add_target("Basename", vim.fn.fnamemodify(path, ":t:r"))
+  add_target("Basename", basename_target(path, item.dir), true)
 
   return targets
 end
@@ -32,7 +46,7 @@ local function explorer_copy_selector(_, item)
     return
   end
 
-  local selections = build_copy_targets(item.file)
+  local selections = build_copy_targets(item)
   if #selections == 0 then
     return
   end
